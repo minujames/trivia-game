@@ -22,11 +22,9 @@ $(document).ready(function(){
     questionIndex : 0,
     currentQuestionObj: null,
 
-    initialize: function(){
-      triviaGame.reset();
-    },
+    winsCount: 0,
 
-    reset: function(){
+    initialize: function(){
       var question1 = new Question("1-What is the color of the sky?", 
         ["red", "blue", "green", "yellow"], "blue", "");
       var question2 = new Question("2-What is the color of the sky?", 
@@ -39,12 +37,13 @@ $(document).ready(function(){
         ["red", "blue", "green", "yellow"], "blue", "");
 
       triviaGame.questions.push(question1, question2, question3, question4, question5);
-      console.log(triviaGame.questions);
 
-      // $("#start-div").hide();
-      // $("#timer-div").hide();
-      // $("#question-div").hide();
+      triviaGame.reset();
+    },
 
+    reset: function(){
+      triviaGame.questionIndex = 0;
+      winsCount = 0;
     },
 
     resetTimeOut: function(){
@@ -61,6 +60,23 @@ $(document).ready(function(){
       triviaGame.nextQuestion();
     },
 
+    nextQuestion: function(){
+      if(triviaGame.questionIndex === triviaGame.questions.length){
+        console.log("quiiz ended");
+        triviaGame.stop();
+      }
+      else{
+        console.log("next question");
+        triviaGame.currentQuestionObj = triviaGame.questions[triviaGame.questionIndex];
+        
+        triviaGame.timerTimeOut = setInterval(triviaGame.updateTimer, 1000);
+        triviaGame.displayTimeOut();
+        triviaGame.displayQuestion();
+
+        triviaGame.questionIndex++;
+      }
+    },
+
     displayQuestion: function(question){
       console.log("inside display question");
       $("#question-div").html(triviaGame.currentQuestionObj.question);
@@ -74,21 +90,32 @@ $(document).ready(function(){
       });
     },
 
-    nextQuestion: function(){
-      if(triviaGame.questionIndex === triviaGame.questions.length){
-        console.log("quiiz ended");
-        triviaGame.stop();
+    evaluateAnswer: function(selectedAnswer){
+      triviaGame.clearTimer();
+      if( selectedAnswer === triviaGame.currentQuestionObj.answer){
+        triviaGame.winsCount++;
+        triviaGame.displayAnswer(true);
       }
       else{
-        console.log("next question");
-        triviaGame.currentQuestionObj = triviaGame.questions[triviaGame.questionIndex];
-        
-        // triviaGame.timerTimeOut = setInterval(triviaGame.updateTimer, 1000);
-        triviaGame.displayTimeOut();
-        triviaGame.displayQuestion();
-
-        triviaGame.questionIndex++;
+        triviaGame.displayAnswer(false);
       }
+    },
+
+    displayAnswer: function(isCorrectAnswer){
+      if(isCorrectAnswer){
+        $("#question-div").html("Correct Answer! Hooray!");
+      }
+      else{
+        $("#question-div").html("Sorry! Wrong answer!");
+      }
+
+      $("#options-div").html("Image goes here!");
+
+      setTimeout(triviaGame.nextQuestion, TIMEOUT_ANSWER * 1000);
+    },
+
+    displayTimeOut: function(){
+      $("#timeout").text("Time Remaining: " + triviaGame.timeOutCounter + " sec");
     },
 
     updateTimer: function(){
@@ -100,42 +127,28 @@ $(document).ready(function(){
         //TODO: disable answer div and put delay to show the answer
         // setTimeout(triviaGame.dispalyAnswer, 100);
 
-        clearInterval(triviaGame.timerTimeOut);
-        triviaGame.displayAnswer();
-        setTimeout(triviaGame.nextQuestion, TIMEOUT_ANSWER * 1000);
-        // triviaGame.timeOutCounter = 3;
-        triviaGame.resetTimeOut();
+        triviaGame.clearTimer();
+        triviaGame.displayAnswer(false);
       }
     },
 
-    evaluateAnswer: function(selectedAnswer){
-      if( selectedAnswer === triviaGame.currentQuestionObj.answer){
-        alert("correct answer!");
-      }
-      else{
-        alert("Wrong!");
-      }
-    },
-
-    displayTimeOut: function(){
-      $("#timeout").text("Time Remaining: " + triviaGame.timeOutCounter + " sec");
-    },
-
-    displayAnswer: function(){
-      $("#options-div").html("answer");
+    clearTimer: function(){
+      clearInterval(triviaGame.timerTimeOut);
+      triviaGame.resetTimeOut();
     },
 
     stop: function(){
       console.log("inside stop");
+      $("#question-div").text("correct answers: " + triviaGame.winsCount);
 
-      $("#start-div").show();
+      $("#start-div").hide();
       $("#timer-div").hide();
-      $("#question-div").hide();
+      // $("#question-div").hide();
       $("#options-div").hide();
     }
   }
 
-  triviaGame.reset();
+  triviaGame.initialize();
 
   $("#start-btn").click(triviaGame.start);
 
