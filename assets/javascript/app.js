@@ -1,16 +1,16 @@
 
 // The time out interval constants for question and answer. 
 // The values are in seconds. 
-const TIMEOUT_QUESTION = 3;
-const TIMEOUT_ANSWER = 3;
+const TIMEOUT_QUESTION = 10;
+const TIMEOUT_ANSWER = 5;
 
 $(document).ready(function(){
   
-  function Question(question, options, answer, answerImage){
+  function Question(question, options, answer, imageUrl){
     this.question = question;
     this.options = options;
     this.answer = answer;
-    this.answerImage = answerImage;
+    this.imageUrl = imageUrl;
   }
 
   var triviaGame = {
@@ -54,13 +54,11 @@ $(document).ready(function(){
         "Denali National Park"], "Denali National Park", "denali-np.jpg");
 
       triviaGame.questions.push(question1, question2, question3, question4, question5, question6, question7);
-
-      triviaGame.reset();
     },
 
     reset: function(){
       triviaGame.questionIndex = 0;
-      winsCount = 0;
+      triviaGame.winsCount = 0;
     },
 
     resetTimeOut: function(){
@@ -68,11 +66,13 @@ $(document).ready(function(){
     },
 
     start: function(){
-      console.log("inside start");
+      triviaGame.reset();
+
       $("#start-div").hide();
+      $("#final-div").hide();
+
       $("#timer-div").show();
-      $("#question-div").show();
-      $("#options-div").show();
+      $("#trivia-div").show();
 
       triviaGame.nextQuestion();
     },
@@ -95,11 +95,12 @@ $(document).ready(function(){
     },
 
     displayQuestion: function(question){
+      $("#trivia-div").show();
+      $("#answer-div").hide();
+
       $("#question-div").text(triviaGame.currentQuestionObj.question);
 
-      var optionsDiv = $("#options-div");
       var newDiv = $('<div>');
-
       var optionsArray = triviaGame.currentQuestionObj.options;
 
       optionsArray.forEach(function(option){
@@ -107,35 +108,47 @@ $(document).ready(function(){
           '"></input><label class="option-label">' + option + '</label></p>'));
       });
 
-      optionsDiv.html(newDiv);
+      $("#options-div").html(newDiv);
     },
 
-    evaluateAnswer: function(selectedAnswer){
+    evaluateAnswer: function(){
       triviaGame.clearTimer();
+      var selectedAnswer = $(this).val();
       if( selectedAnswer === triviaGame.currentQuestionObj.answer){
         triviaGame.winsCount++;
-        triviaGame.displayAnswer(true);
+        triviaGame.displayAnswer(true, "Correct Answer! Hooray!");
       }
       else{
-        triviaGame.displayAnswer(false);
+        triviaGame.displayAnswer(false, "Oops! Wrong answer!");
       }
     },
 
-    displayAnswer: function(isCorrectAnswer){
-      if(isCorrectAnswer){
-        $("#question-div").html("Correct Answer! Hooray!");
+    displayAnswer: function(isCorrectAnswer, message){
+      $("#trivia-div").hide();
+      $("#answer-div").show();
+
+      $("#result-div").html(message);
+
+      var pAnswer = $('<p>');
+      if(!isCorrectAnswer){
+        pAnswer.html("Correct answer was: " + triviaGame.currentQuestionObj.answer);
       }
       else{
-        $("#question-div").html("Sorry! Wrong answer!");
+        pAnswer.html( triviaGame.currentQuestionObj.answer);
       }
-
-      $("#options-div").html("Image goes here!");
+      $("#answer-img-div").html(pAnswer);
+      
+      var answerImage = $("<img>");
+      var url = "assets/images/" + triviaGame.currentQuestionObj.imageUrl; 
+      answerImage.attr("src", url);
+      answerImage.addClass("answer-image");
+      $("#answer-img-div").append(answerImage);
 
       setTimeout(triviaGame.nextQuestion, TIMEOUT_ANSWER * 1000);
     },
 
     displayTimeOut: function(){
-      $("#timeout").text("Time Remaining: " + triviaGame.timeOutCounter + " sec");
+      $("#timeout").text("Time Remaining: " + triviaGame.timeOutCounter + " seconds");
     },
 
     updateTimer: function(){
@@ -143,12 +156,10 @@ $(document).ready(function(){
       triviaGame.displayTimeOut();
       
       if(triviaGame.timeOutCounter === 0){
-        console.log("Timeout reached");
-        //TODO: disable answer div and put delay to show the answer
-        // setTimeout(triviaGame.dispalyAnswer, 100);
+        console.log("Timeout");
 
         triviaGame.clearTimer();
-        triviaGame.displayAnswer(false);
+        triviaGame.displayAnswer(false, "Out of Time!");
       }
     },
 
@@ -157,14 +168,13 @@ $(document).ready(function(){
       triviaGame.resetTimeOut();
     },
 
-    stop: function(){
-      console.log("inside stop");
-      $("#question-div").text("correct answers: " + triviaGame.winsCount);
+    stop: function(){  
+      $("#final-result-div").text("Correct answers: " + triviaGame.winsCount);
 
-      $("#start-div").hide();
       $("#timer-div").hide();
-      // $("#question-div").hide();
-      $("#options-div").hide();
+      $("#answer-div").hide();
+
+      $("#final-div").show();
     }
   }
 
@@ -172,8 +182,8 @@ $(document).ready(function(){
 
   $("#start-btn").click(triviaGame.start);
 
-  $('#options-div').on('change', 'input[name="option"]', function(){
-    triviaGame.evaluateAnswer($(this).val());
-  });
+  $("#restart-btn").click(triviaGame.start);
+
+  $('#options-div').on('change', 'input[name="option"]', triviaGame.evaluateAnswer);
 
 });

@@ -2,14 +2,14 @@ html{
   height: 100%;
 }
 
-
 body{
   height: 100%;
+  width: 100%;
   background: url(http://miriadna.com/desctopwalls/images/max/Looking-at-the-tops-of-trees.jpg);
   background-repeat:no-repeat;
   background-position: center;
   background-size: cover;
-  /*background-color: pink;*/
+  font: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .main-container {
@@ -18,6 +18,7 @@ body{
   box-sizing: border-box;
   padding: 60px 0 60px 0;
   position: relative;
+  text-align: center;
 }
 
 .main-row {
@@ -26,48 +27,30 @@ body{
   position: relative;
 }
 
-
 .main-col {
   height: 100%;
   display: table-cell;
   float: none;
-  /*background-color: lightblue;*/
+  background-color: lightblue;
   text-align: center;
   position: relative;
   overflow: auto;
-  /*background-color: #e0df13;*/
-  /*background-color: #669400;*/
-  /*background-color: #3c5400;*/
-  /*background-color: #265a07;*/
-  /*background-color: brown;*/
-  background-color: white;
   
-/*  background: url(../images/trees.jpg);
-  background-repeat:no-repeat;
-  background-position: center;
-  background-size: cover;*/
-
-  /*z-index: 1;*/
+  background: url(../images/vintage-concrete.png);
+  border-radius: 30px;
 }
 
 .logo{
-  height: 15%;
-/*margin-top: 20px;*/
-  /*background-color: blue;*/
-  font-size: 50px;
+  height: 10%;
+  margin-top: 20px;
+  font-size: 60px;
   text-align: center;
-
-}
-
-#start-btn{
-  position: relative;
-  width: 150px;
-  margin-top: 22%;
+  font-family: 'Sancreek', cursive;
+  color: darkgreen;
 }
 
 .content{
   position: relative;
-  /*background-color: red;*/
   vertical-align: bottom;
   width: 100%;
   height: 85%;
@@ -75,25 +58,98 @@ body{
 
 .timer{
   display: none;
-  font-size: 30px;
-  line-height: 100px;
-  /*background-color: grey;*/
+  font-size: 25px;
+  font-family: 'Oswald', sans-serif;
+  margin-top: 20px;
+}
+
+#start-div{
+  margin-top: 24%;
+}
+
+#timer-div{
+  display: none;
+}
+
+#trivia-div{
+  display: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+#answer-div{
+  margin-top: 20px;
+  font-size: 25px;
+  display: none;
+  text-align: center;
+  overflow: auto;
+  position: relative;
+}
+
+#final-div{
+  display: none;
+  margin-top: 23%;
 }
 
 .question{
-  display: none;
   font-size: 30px;
-  /*background-color: lightgreen;*/
+  margin-top: 15%;
+  color: #4b320c;
 }
 
 .options{
-  display:none;
-  font-size: 20px;
-  /*background-color: pink;*/
+  font-size: 25px;
   text-align: left;
-  margin-left: 40%;
+  margin-left: 35%;
+  margin-top: 20px;
+  font-weight: bold;
+  color: darkgreen;
+}
+
+.btn-trivia{
+  position: relative;
+  width: 150px;
+  height: 50px;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  background-color: darkgreen;
+  border-radius: 30px;
+}
+
+.btn-trivia:hover{
+  color: darkgreen;
+  background-color: white;
+}
+
+#restart-btn{
+  margin-top: 10px;
+}
+
+#final-result-div{
+  font-size: 25px;
 }
 
 .option-label{
   margin-left: 10px;
+}
+
+#result-div, #options-div{
+  font-weight: bold;
+}
+
+#answer-img-div{
+  margin-top: 20px;
+  font-size: 22px;
+  text-align: center;
+  width: 100%;
+  height: 60%;
+  overflow: auto;
+  position: relative;
+}
+
+.answer-image{
+  width: 90%;
+  height: 450px;
+  text-align: center;
+  border-radius: 30px;
 }

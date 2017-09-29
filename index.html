@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Oswald|Sancreek|Roboto" rel="stylesheet">
 </head>
 <body>
 
@@ -16,19 +17,31 @@
           <section class="logo">NATIONAL PARKS TRIVIA</section>
 
           <section class="content">
+
             <div id="start-div" class="start">
-              <button id="start-btn" class="btn">START</button>
+              <button id="start-btn" class="btn btn-trivia">START</button>
             </div>
 
             <div id="timer-div" class="timer">
               <label id="timeout"></label>
             </div>
 
-            <div id="question-div" class="question"></div>
+            <div id="trivia-div">
+              <div id="question-div" class="question"></div>
+              <div id="options-div" class="options"></div>
+            </div>
 
-            <div id="options-div" class="options"></div>
+            <div id="answer-div">
+              <div id="result-div" class="result"></div>
+              <div id="answer-img-div" class="answer-image"></div>
+            </div>
+
+            <div id="final-div">
+              <div id="final-result-div" class="wins"></div>
+              <button id="restart-btn" class="btn btn-trivia">RESTART</button>
+            </div>
+
           </section>
-
         </div>
     </div>
 </div>
